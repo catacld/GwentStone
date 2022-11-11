@@ -8,11 +8,18 @@ import java.util.ArrayList;
 public class GameBoard {
 
     private static GameBoard instance = null;
-    private MinionCard[][] gameBoard;
+
+    private ArrayList<ArrayList<MinionCard>> gameBoard;
 
 
     private GameBoard() {
-        gameBoard = new MinionCard[4][5];
+
+        gameBoard = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            gameBoard.add(new ArrayList<>());
+        }
+
     }
 
     // we make the class singleton since we always
@@ -26,35 +33,42 @@ public class GameBoard {
         return instance;
     }
 
+    public static void setInstance(GameBoard instance) {
+        GameBoard.instance = instance;
+    }
+
     public MinionCard getCard(int x, int y) {
-        return gameBoard[x][y];
+
+        if (y == gameBoard.get(x).size()) {
+            return null;
+        } else {
+            return gameBoard.get(x).get(y);
+        }
     }
 
 
-    public void placeCard(int x, int y, MinionCard card) {
-        gameBoard[x][y] = card;
+    public int placeCard(int rowIndex, MinionCard card) {
+
+
+        if (gameBoard.get(rowIndex).size() == 5) {
+            return -1;
+        } else {
+            gameBoard.get(rowIndex).add(card);
+            return 1;
+        }
+
     }
 
     public void deleteCard(int x, int y) {
-        gameBoard[x][y] = null;
-        for (int i = x; i < 4; i++) {
-            gameBoard[i][y] = gameBoard[i+1][y];
-        }
+        gameBoard.get(x).remove(y);
     }
 
 
     // get cards from a row
     public ArrayList<MinionCard> getRow(int rowIndex) {
 
-        ArrayList<MinionCard> cards = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
-            if (gameBoard[rowIndex][i] != null) {
-                cards.add(gameBoard[rowIndex][i]);
-            }
-        }
-
-        return cards;
+        return gameBoard.get(rowIndex);
 
     }
 
@@ -62,10 +76,10 @@ public class GameBoard {
         int maximum = Integer.MIN_VALUE;
         MinionCard maxCard = null;
 
-        for (int i = 0; i < 5 ; i++) {
-            if (gameBoard[index][i] != null && gameBoard[index][i].getAttackDamage() > maximum) {
-                maximum = gameBoard[index][i].getAttackDamage();
-                maxCard = gameBoard[index][i];
+        for (int i = 0; i < gameBoard.get(index).size() ; i++) {
+            if (gameBoard.get(index).get(i).getAttackDamage() > maximum) {
+                maximum = gameBoard.get(index).get(i).getAttackDamage();
+                maxCard = gameBoard.get(index).get(i);
             }
         }
 
@@ -76,9 +90,9 @@ public class GameBoard {
         int maximum = Integer.MIN_VALUE;
         int maxHealthIndex = -1;
 
-        for (int i = 0; i < 5 ; i++) {
-            if (gameBoard[index][i] != null && gameBoard[index][i].getHealth() > maximum) {
-                maximum = gameBoard[index][i].getHealth();
+        for (int i = 0; i < gameBoard.get(index).size() ; i++) {
+            if (gameBoard.get(index).get(i).getHealth() > maximum) {
+                maximum = gameBoard.get(index).get(i).getHealth();
                 maxHealthIndex = i;
             }
         }
@@ -86,7 +100,18 @@ public class GameBoard {
         return maxHealthIndex;
     }
 
-    public MinionCard[][] getGameBoard() {
+    public ArrayList<ArrayList<MinionCard>> getGameBoard() {
         return gameBoard;
+    }
+
+
+    public void unfreezeAll() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < gameBoard.get(i).size(); j++) {
+                if (gameBoard.get(i).get(j) instanceof MinionCard) {
+                    gameBoard.get(i).get(j).setFrozen(false);
+                }
+            }
+        }
     }
 }

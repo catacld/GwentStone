@@ -1,5 +1,8 @@
 package fileio;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public final class ActionsInput {
     private String command;
     private int handIdx;

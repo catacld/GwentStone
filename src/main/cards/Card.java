@@ -1,6 +1,8 @@
 package main.cards;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ public class Card {
     private String name;
 
     // check which player has the card
+    @JsonIgnore
     private int playerId;
 
     public Card() {
@@ -72,6 +75,8 @@ public class Card {
     public void useAbility(int rowIndex) {
     }
 
+
+
     @Override
     public String toString() {
         return "Card{" +
@@ -79,7 +84,6 @@ public class Card {
                 ", description='" + description + '\'' +
                 ", colors=" + colors +
                 ", name='" + name + '\'' +
-                ", playerId=" + playerId +
                 '}';
     }
 }

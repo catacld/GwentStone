@@ -17,4 +17,11 @@ public class HeroCard extends Card{
     public void setHealth(int health) {
         this.health = health;
     }
+
+//    @Override
+//    public String toString() {
+//        return "HeroCard{" +
+//                "health= \n" + health +
+//                '}';
+//    }
 }

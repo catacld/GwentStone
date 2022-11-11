@@ -1,18 +1,30 @@
 package main.cards;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.ArrayList;
 
+@JsonPropertyOrder({ "mana", "attackDamage", "health", "description", "colors", "name"})
 public class MinionCard extends Card{
 
-    private int health, attackDamage;
+    private int health;
+    private int attackDamage;
+
+    @JsonIgnore
+    private int boardPosition;
+
+
     //check if a card is frozen
+    @JsonIgnore
     private boolean frozen;
 
-    public MinionCard(int mana, String description, ArrayList<String> colors, String name, int health, int attackDamage, int playerId) {
+    public MinionCard(int mana, String description, ArrayList<String> colors, String name, int health, int attackDamage, int playerId, int boardPosition) {
         super(mana, description, colors, name, playerId);
         this.health = health;
         this.attackDamage = attackDamage;
         this.frozen = false;
+        this.boardPosition = boardPosition;
     }
 
     public int getHealth() {
@@ -39,12 +51,11 @@ public class MinionCard extends Card{
         this.frozen = frozen;
     }
 
-    @Override
-    public String toString() {
-        return "MinionCard{" +
-                "health=" + health +
-                ", attackDamage=" + attackDamage +
-                ", frozen=" + frozen + ", name=" + super.getName() +
-                '}';
+    public int getBoardPosition() {
+        return boardPosition;
+    }
+
+    public void setBoardPosition(int boardPosition) {
+        this.boardPosition = boardPosition;
     }
 }

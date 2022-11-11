@@ -1,9 +1,11 @@
 package main;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import main.cards.Card;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
+
 import fileio.CardInput;
 import main.cards.MinionCard;
 import main.cards.environmentCards.Firestorm;
@@ -12,11 +14,11 @@ import main.cards.environmentCards.Winterfell;
 import main.cards.minionCards.*;
 
 public class Deck {
-
-    private Stack<Card> deck;
+    @JsonProperty("output")
+    private ArrayList<Card> deck;
 
     public Deck(ArrayList<CardInput> inputDeck, int id) {
-        this.deck = new Stack<>();
+        this.deck = new ArrayList<>();
 
         for  (int i = 0; i < inputDeck.size(); i++) {
 
@@ -74,10 +76,110 @@ public class Deck {
         }
     }
 
-        //debug purpose remove after hw is done
-//    public void printCards() {
-//        while (deck.size() != 0) {
-//            System.out.println(deck.pop());
-//        }
-//    }
+    // constructor used to deep copy another deck
+    public Deck(Deck copyDeck, int id) {
+        this.deck = new ArrayList<>();
+
+        for (int i = 0; i < copyDeck.getSize(); i++) {
+
+            Card card = copyDeck.getCard(i);
+            String nameOfCard = card.getName();
+            Card copyCard = null;
+
+            switch (nameOfCard) {
+                case "Disciple":
+                    copyCard = new Disciple(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Disciple) card).getHealth(), ((Disciple) card).getAttackDamage(), id );
+                    break;
+                case "Miraj":
+                    copyCard = new Miraj(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Miraj) card).getHealth(), ((Miraj) card).getAttackDamage(), id );
+                    break;
+                case "The Ripper":
+                    copyCard = new TheRipper(card.getMana(), card.getDescription(), card.getColors(),
+                            ((TheRipper) card).getHealth(), ((TheRipper) card).getAttackDamage(), id );
+                    break;
+                case "The Cursed One":
+                    copyCard = new TheCursedOne(card.getMana(), card.getDescription(), card.getColors(),
+                            ((TheCursedOne) card).getHealth(), ((TheCursedOne) card).getAttackDamage(), id );
+                    break;
+                case "Sentinel":
+                    copyCard = new Sentinel(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Sentinel) card).getHealth(), ((Sentinel) card).getAttackDamage(), id );
+                    break;
+                case "Berserker":
+                    copyCard = new Berserker(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Berserker) card).getHealth(), ((Berserker) card).getAttackDamage(), id );
+                    break;
+                case "Goliath":
+                    copyCard = new Goliath(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Goliath) card).getHealth(), ((Goliath) card).getAttackDamage(), id );
+                    break;
+                case "Warden":
+                    copyCard = new Warden(card.getMana(), card.getDescription(), card.getColors(),
+                            ((Warden) card).getHealth(), ((Warden) card).getAttackDamage(), id );
+                    break;
+                case "Firestorm":
+                    copyCard = new Firestorm(card.getMana(), card.getDescription(), card.getColors(),id );
+                    break;
+                case "Winterfell":
+                    copyCard = new Winterfell(card.getMana(), card.getDescription(), card.getColors(),id );
+                    break;
+                case "Heart Hound":
+                    copyCard = new HeartHound(card.getMana(), card.getDescription(), card.getColors(),id );
+                    break;
+            }
+
+            this.deck.add(copyCard);
+
+        }
+
+    }
+
+
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
+
+    public void setDeck(ArrayList<Card> deck) {
+        this.deck = deck;
+    }
+
+
+
+    @JsonIgnore
+    public int getSize() {
+        return deck.size();
+    }
+
+    public Card getCard(int index) {
+        return deck.get(index);
+    }
+
+    // unfreeze the cards
+    public void endTurn() {
+        for (Card card : deck) {
+            if (card instanceof MinionCard) {
+                ((MinionCard) card).setFrozen(false);
+            }
+        }
+    }
+
+    public void shuffle(int seed) {
+        Random random = new Random(seed);
+        Collections.shuffle(this.deck, random);
+    }
+
+
+
+    public Card drawCard() {
+            return deck.remove(0);
+    }
+
+    //debug purpose remove after hw is done
+    public void printCards() {
+        for (int i = 0; i < deck.size(); i++) {
+            System.out.println(deck.get(i));
+        }
+    }
 }
