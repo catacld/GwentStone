@@ -102,18 +102,27 @@ public final class Main {
         DecksInput playerTwoDecksInput = inputData.getPlayerTwoDecks();
         ArrayList<GameInput> games = inputData.getGames();
 
-        Player player1 = new Player(0,0, playerOneDecksInput.getNrDecks(), playerOneDecksInput, 1);
-        Player player2 = new Player(0,0, playerTwoDecksInput.getNrDecks(), playerTwoDecksInput, 2);
+        //Player player1 = new Player(0,0, playerOneDecksInput.getNrDecks(), playerOneDecksInput, 1);
+        //Player player2 = new Player(0,0, playerTwoDecksInput.getNrDecks(), playerTwoDecksInput, 2);
 
-        players.add(player1);
-        players.add(player2);
+        //players.add(player1);
+        //players.add(player2);
 
         GameBoard gameBoard;
+
+        int gamesPlayed = 0;
+        int player1Wins = 0;
+        int player2Wins = 0;
 
 
         // starting each game
 
         for (int i = 0; i < games.size(); i++) {
+
+            gamesPlayed++;
+
+            Player player1 = new Player(gamesPlayed,player1Wins, playerOneDecksInput.getNrDecks(), playerOneDecksInput, 1);
+            Player player2 = new Player(gamesPlayed,player2Wins, playerTwoDecksInput.getNrDecks(), playerTwoDecksInput, 2);
 
             gameBoard = GameBoard.getInstance();
 
@@ -127,6 +136,7 @@ public final class Main {
             // aux variables to check which players ended their turns
             boolean player1Ended = false;
             boolean player2Ended = false;
+            boolean gameInProgress = true;
 
             // preparation at the beginning of each game
             //players.clear();
@@ -158,11 +168,20 @@ public final class Main {
             ArrayList<ActionsInput> actions = games.get(i).getActions();
 
 
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("---PLAYER1 MANA AT THE BEGINNING----" + player1.getMana());
+            System.out.println("---PLAYER2 MANA AT THE BEGINNING----" + player2.getMana());
+            System.out.println();
+            System.out.println();
+            System.out.println();
 
 
 
 
-            for (int j = 0; j < actions.size(); j++) {
+
+            for (int j = 0; j < actions.size() && gameInProgress == true; j++) {
                 //player1.setMana(player1.getMana() + Math.max(manaToReceive,10));
                 //player2.setMana(player2.getMana() + Math.max(manaToReceive,10));
 
@@ -223,10 +242,12 @@ public final class Main {
                         if (playerTurn == 1) {
                             player1Ended = true;
                             gameBoard.unfreeze(1);
+                            player1.getHero().setFrozen(0);
                             playerTurn = 2;
                         } else {
                             player2Ended = true;
                             gameBoard.unfreeze(2);
+                            player2.getHero().setFrozen(0);
                             playerTurn = 1;
                         }
                         // preparing a new round
@@ -240,6 +261,14 @@ public final class Main {
                             manaToReceive++;
                             player1.setMana(player1.getMana() + Math.min(manaToReceive,10));
                             player2.setMana(player2.getMana() + Math.min(manaToReceive,10));
+                            System.out.println();
+                            System.out.println();
+                            System.out.println();
+                            System.out.println("---PLAYER1 MANA AT THE BEGINNING----" + player1.getMana());
+                            System.out.println("---PLAYER2 MANA AT THE BEGINNING----" + player2.getMana());
+                            System.out.println();
+                            System.out.println();
+                            System.out.println();
                         }
                         break;
                     case "placeCard" :
@@ -513,6 +542,107 @@ public final class Main {
                         }
 
                         break;
+                    case "useAttackHero":
+                        cardAttackerX = actions.get(j).getCardAttacker().getX();
+                        cardAttackerY = actions.get(j).getCardAttacker().getY();
+                        commandUseAttackHero useAttackHero;
+                        if (gameBoard.getCard(cardAttackerX,cardAttackerY) != null) {
+                            if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 1) {
+                                useAttackHero = new commandUseAttackHero(command, cardAttackerX, cardAttackerY, "Attacker card is frozen.", null);
+                                output.add(objectMapper.convertValue(useAttackHero, JsonNode.class));
+                            } else if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 2) {
+                                useAttackHero = new commandUseAttackHero(command, cardAttackerX, cardAttackerY, "Attacker card has already attacked this turn.", null);
+                                output.add(objectMapper.convertValue(useAttackHero, JsonNode.class));
+                            } else {
+                                boolean rowHasTank = gameBoard.containsTank(playerTurn);
+                                if (rowHasTank == true) {
+                                    useAttackHero = new commandUseAttackHero(command, cardAttackerX, cardAttackerY, "Attacked card is not of type 'Tank'.", null);
+                                    output.add(objectMapper.convertValue(useAttackHero, JsonNode.class));
+                                } else {
+                                        if (playerTurn == 1) {
+                                            player2.getHero().setHealth(player2.getHero().getHealth() -
+                                                                        gameBoard.getCard(cardAttackerX, cardAttackerY).getAttackDamage());
+                                            if (player2.getHero().getHealth() <= 0) {
+                                                commandGameEnded gameEnded = new commandGameEnded("Player one killed the enemy hero.");
+                                                output.add(objectMapper.convertValue(gameEnded, JsonNode.class));
+                                                player1Wins++;
+                                                player1.setGamesWon(player1Wins);
+//                                                player1.setGamesPlayed(player1.getGamesPlayed() + 1);
+//                                                player2.setGamesPlayed(player2.getGamesPlayed() + 1);
+//                                                gameInProgress = false;
+                                            }
+                                        } else {
+                                            player1.getHero().setHealth(player1.getHero().getHealth() -
+                                                    gameBoard.getCard(cardAttackerX, cardAttackerY).getAttackDamage());
+                                            if (player1.getHero().getHealth() <= 0) {
+                                                commandGameEnded gameEnded = new commandGameEnded("Player two killed the enemy hero.");
+                                                output.add(objectMapper.convertValue(gameEnded, JsonNode.class));
+                                                player2Wins++;
+                                                player2.setGamesWon(player2Wins);
+//                                                player1.setGamesPlayed(player1.getGamesPlayed() + 1);
+//                                                player2.setGamesPlayed(player2.getGamesPlayed() + 1);
+//                                                gameInProgress = false;
+                                            }
+                                        }
+
+                                    gameBoard.getCard(cardAttackerX, cardAttackerY).setFrozen(2);
+                                }
+                            }
+
+                        }
+                        break;
+                    case "useHeroAbility":
+
+                        commandUseHeroAbility useHeroAbility;
+                        affectedRow = actions.get(j).getAffectedRow();
+
+                        if (playerTurn == 1) {
+                            player  = player1;
+                        } else {
+                            player = player2;
+                        }
+
+
+
+                        if (player.getMana() < player.getHero().getMana()) {
+                            useHeroAbility = new commandUseHeroAbility(command, affectedRow,  "Not enough mana to use hero's ability.");
+                            output.add(objectMapper.convertValue(useHeroAbility, JsonNode.class));
+                            System.out.println("ERROR 1 FOR ----USE HERO " + playerTurn + " AFFECTED ROW " + affectedRow + " NAME " +player.getHero().getName());
+                        } else if (player.getHero().getFrozen() == 1) {
+                            System.out.println("ERROR 2 FOR ----USE HERO " + playerTurn + " AFFECTED ROW " + affectedRow + " NAME " +player.getHero().getName());
+                            useHeroAbility = new commandUseHeroAbility(command, affectedRow,  "Hero has already attacked this turn.");
+                            output.add(objectMapper.convertValue(useHeroAbility, JsonNode.class));
+                        } else if ((player.getHero().getName().equals("Lord Royce") || player.getHero().getName().equals("Empress Thorina")) &&
+                                ((playerTurn == 1 && affectedRow >= 2) || (playerTurn == 2 && affectedRow < 2))) {
+                            System.out.println("ERROR 3 FOR ----USE HERO " + playerTurn + " AFFECTED ROW " + affectedRow + " NAME " +player.getHero().getName());
+                            useHeroAbility = new commandUseHeroAbility(command, affectedRow,  "Selected row does not belong to the enemy.");
+                            output.add(objectMapper.convertValue(useHeroAbility, JsonNode.class));
+                        } else if ((player.getHero().getName().equals("General Kocioraw") || player.getHero().getName().equals("King Mudface")) &&
+                                ((playerTurn == 1 && affectedRow < 2) || (playerTurn == 2 && affectedRow >= 2))) {
+                            System.out.println("ERROR 4 FOR ----USE HERO " + playerTurn + " AFFECTED ROW " + affectedRow + " NAME " +player.getHero().getName());
+                            useHeroAbility = new commandUseHeroAbility(command, affectedRow,  "Selected row does not belong to the current player.");
+                            output.add(objectMapper.convertValue(useHeroAbility, JsonNode.class));
+                        } else {
+                            player.getHero().useHeroAbility(affectedRow);
+                            player.setMana(player.getMana() - player.getHero().getMana());
+                            player.getHero().setFrozen(1);
+                        }
+
+
+
+                        break;
+                    case "getTotalGamesPlayed":
+                        commandGetGames getGames = new commandGetGames(command, player1.getGamesPlayed());
+                        output.add(objectMapper.convertValue(getGames, JsonNode.class));
+                        break;
+                    case "getPlayerOneWins":
+                        getGames = new commandGetGames(command, player1.getGamesWon());
+                        output.add(objectMapper.convertValue(getGames, JsonNode.class));
+                        break;
+                    case "getPlayerTwoWins":
+                        getGames = new commandGetGames(command, player2.getGamesWon());
+                        output.add(objectMapper.convertValue(getGames, JsonNode.class));
+                        break;
                     case "someActionIdk":
                         break;
                 }
@@ -533,6 +663,10 @@ public final class Main {
 
             // emptying the gameboard for the next game
             gameBoard.setInstance(null);
+
+
+            player1.setMana(0);
+            player2.setMana(0);
         }
 
 

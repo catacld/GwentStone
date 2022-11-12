@@ -59,7 +59,7 @@ public class GameBoard {
             for(int i =0; i < 4; i++) {
                 for (int w =0; w < gameBoard.get(i).size(); w++) {
                     System.out.println("---ROW " + i + "---COLUMN " + w + "---CARD: " + gameBoard.get(i).get(w) + "HEALTH: " + gameBoard.get(i).get(w).getHealth()
-                            + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage());
+                            + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage() + "MANA-----" + gameBoard.get(i).get(w).getMana());
                 }
                 //System.out.println();
             }

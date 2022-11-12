@@ -75,6 +75,8 @@
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
 }, {
+  "gameEnded" : "Player two killed the enemy hero."
+}, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
     "mana" : 1,
@@ -128,11 +130,20 @@
     "name" : "Disciple"
   } ]
 }, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 1
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 0
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
   "command" : "getPlayerMana",
-  "output" : 4,
+  "output" : 1,
   "playerIdx" : 2
 }, {
   "command" : "getEnvironmentCardsInHand",
@@ -154,7 +165,7 @@
   "output" : 1
 }, {
   "command" : "getPlayerMana",
-  "output" : 7,
+  "output" : 1,
   "playerIdx" : 1
 }, {
   "command" : "getCardAtPosition",
@@ -168,7 +179,7 @@
   }
 }, {
   "command" : "getPlayerMana",
-  "output" : 6,
+  "output" : 3,
   "playerIdx" : 2
 }, {
   "command" : "getFrozenCardsOnTable",
@@ -186,23 +197,21 @@
     "name" : "Heart Hound"
   } ]
 }, {
-  "command" : "placeCard",
-  "handIdx" : 1,
-  "error" : "Cannot place environment card on table."
-}, {
   "command" : "getCardAtPosition",
-  "error" : "No card at that position."
-}, {
-  "command" : "useEnvironmentCard",
-  "handIdx" : 0,
-  "affectedRow" : 1,
-  "error" : "Chosen card is not of type environment."
+  "output" : {
+    "mana" : 2,
+    "attackDamage" : 7,
+    "health" : 1,
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden"
+  }
 }, {
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
 }, {
   "command" : "getPlayerMana",
-  "output" : 10,
+  "output" : 0,
   "playerIdx" : 1
 }, {
   "command" : "getEnvironmentCardsInHand",
@@ -217,11 +226,18 @@
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
 }, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 1
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
   "command" : "getCardAtPosition",
   "output" : {
     "mana" : 2,
     "attackDamage" : 7,
-    "health" : 6,
+    "health" : 1,
     "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden"
@@ -229,15 +245,10 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ {
-    "mana" : 2,
-    "description" : "Standard card: The dragon was unleashed, run for your lives.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm"
-  } ]
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
-  "output" : 12,
+  "output" : 2,
   "playerIdx" : 1
 }, {
   "command" : "getPlayerTurn",
@@ -256,21 +267,16 @@
   "output" : {
     "mana" : 2,
     "attackDamage" : 5,
-    "health" : 6,
+    "health" : 1,
     "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden"
   }
 }, {
+  "gameEnded" : "Player one killed the enemy hero."
+}, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
-    "mana" : 2,
-    "attackDamage" : 0,
-    "health" : 2,
-    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-    "colors" : [ "Green", "Yellow", "Blue" ],
-    "name" : "Disciple"
-  }, {
     "mana" : 2,
     "attackDamage" : 0,
     "health" : 3,
@@ -280,41 +286,25 @@
   } ], [ {
     "mana" : 1,
     "attackDamage" : 5,
-    "health" : 4,
+    "health" : 3,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj"
   }, {
     "mana" : 2,
     "attackDamage" : 6,
-    "health" : 4,
+    "health" : 3,
     "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
     "colors" : [ "Orange", "Red", "Black" ],
     "name" : "The Ripper"
   } ], [ {
     "mana" : 2,
     "attackDamage" : 5,
-    "health" : 6,
+    "health" : 1,
     "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden"
   } ], [ {
-    "mana" : 1,
-    "attackDamage" : 0,
-    "health" : 2,
-    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-    "colors" : [ "Yellow", "White" ],
-    "name" : "Disciple"
-  } ] ]
-}, {
-  "command" : "getCardsInHand",
-  "playerIdx" : 1,
-  "output" : [ {
-    "mana" : 2,
-    "description" : "Standard card: The dragon was unleashed, run for your lives.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm"
-  }, {
     "mana" : 2,
     "attackDamage" : 6,
     "health" : 3,
@@ -328,7 +318,11 @@
     "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
     "colors" : [ "Black", "Grey", "Blue" ],
     "name" : "Sentinel"
-  }, {
+  } ] ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
     "mana" : 2,
     "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
     "colors" : [ "White", "Grey", "Black" ],
@@ -343,4 +337,13 @@
     "colors" : [ "Green", "Black" ],
     "name" : "Heart Hound"
   } ]
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 2
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 1
 } ]

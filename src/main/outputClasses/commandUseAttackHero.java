@@ -13,9 +13,9 @@ public class commandUseAttackHero {
 
     private String gameEnded;
 
-    public commandUseAttackHero(String command, Coordinates cardAttacker, String error, String gameEnded) {
+    public commandUseAttackHero(String command, int x1, int y1, String error, String gameEnded) {
         this.command = command;
-        this.cardAttacker = cardAttacker;
+        this.cardAttacker = new Coordinates(x1, y1);
         this.error = error;
         this.gameEnded = gameEnded;
     }
