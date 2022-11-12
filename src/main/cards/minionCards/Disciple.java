@@ -14,6 +14,7 @@ public class Disciple extends MinionCard {
     public Disciple(int mana, String description, ArrayList<String> colors, int health, int attackDamage, int playerId) {
         super(mana, description, colors,"Disciple", health, attackDamage, playerId, 2 * (playerId % 2) + playerId % 2);
         //boardPosition = 2 * (playerId % 2) + playerId % 2;
+        this.board = GameBoard.getInstance();
     }
 
     public void cardUsesAbility(int x, int y) {

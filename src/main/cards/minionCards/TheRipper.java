@@ -20,7 +20,7 @@ public class TheRipper extends MinionCard {
 
     public void cardUsesAbility(int x, int y) {
         MinionCard targetCard = board.getCard(x,y);
-        targetCard.setAttackDamage(targetCard.getAttackDamage() - 2);
+        targetCard.setAttackDamage(Math.max(targetCard.getAttackDamage() - 2,0));
     }
 
 

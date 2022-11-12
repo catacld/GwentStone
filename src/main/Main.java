@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.Objects;
 import java.util.ArrayList;
 
@@ -22,6 +23,10 @@ import main.cards.MinionCard;
 import main.cards.environmentCards.Firestorm;
 import main.cards.environmentCards.HeartHound;
 import main.cards.environmentCards.Winterfell;
+import main.cards.minionCards.Disciple;
+import main.cards.minionCards.Miraj;
+import main.cards.minionCards.TheCursedOne;
+import main.cards.minionCards.TheRipper;
 import main.outputClasses.*;
 
 /**
@@ -57,13 +62,16 @@ public final class Main {
             resultFile.delete();
         }
         Files.createDirectories(path);
+        int i = 1;
 
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             String filepath = CheckerConstants.OUT_PATH + file.getName();
             File out = new File(filepath);
             boolean isCreated = out.createNewFile();
             if (isCreated) {
+                System.out.println("-------TEST " + i + "----------") ;
                 action(file.getName(), filepath);
+                i++;
             }
         }
 
@@ -214,9 +222,11 @@ public final class Main {
                     case "endPlayerTurn":
                         if (playerTurn == 1) {
                             player1Ended = true;
+                            gameBoard.unfreeze(1);
                             playerTurn = 2;
                         } else {
                             player2Ended = true;
+                            gameBoard.unfreeze(2);
                             playerTurn = 1;
                         }
                         // preparing a new round
@@ -227,7 +237,6 @@ public final class Main {
                                 player1.addInHand(player1.getDeck().drawCard());
                                 player2.addInHand(player2.getDeck().drawCard());
                             }
-                            gameBoard.unfreezeAll();
                             manaToReceive++;
                             player1.setMana(player1.getMana() + Math.min(manaToReceive,10));
                             player2.setMana(player2.getMana() + Math.min(manaToReceive,10));
@@ -359,10 +368,149 @@ public final class Main {
                         output.add(objectMapper.convertValue(frozenTable, JsonNode.class));
                         break;
                     case "cardUsesAttack":
+
+
+
                         int cardAttackerX = actions.get(j).getCardAttacker().getX();
                         int cardAttackerY = actions.get(j).getCardAttacker().getY();
                         int cardAttackedX = actions.get(j).getCardAttacked().getX();
                         int cardAttackedY = actions.get(j).getCardAttacked().getY();
+                        commandCardUsesAttack cardUsesAttack;
+
+
+
+
+                        if (gameBoard.getCard(cardAttackerX,cardAttackerY) != null &&
+                                gameBoard.getCard(cardAttackedX,cardAttackedY) != null) {
+                            System.out.println("---ATTACKER CARD:------" + gameBoard.getCard(cardAttackerX,cardAttackerY) + "--ATTACK--" +
+                                    gameBoard.getCard(cardAttackerX,cardAttackerY).getAttackDamage());
+                            if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 1) {
+                                System.out.println("------EXCEPTIA 1-----");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacker card is frozen.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 2) {
+                                System.out.println("-----EXCEPTIA 2-------");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacker card has already attacked this turn.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else if ((playerTurn == 1 && cardAttackedX > 1) || (playerTurn == 2 && cardAttackedX <= 1)) {
+                                System.out.println("-----EXCEPTIA 3-----");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacked card does not belong to the enemy.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else {
+                                boolean rowHasTank = gameBoard.containsTank(playerTurn);
+
+                                if (rowHasTank == true && !gameBoard.getCard(cardAttackedX, cardAttackedY).getName().equals("Goliath")
+                                        && !gameBoard.getCard(cardAttackedX, cardAttackedY).getName().equals("Warden")) {
+                                    cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                            cardAttackedY, "Attacked card is not of type 'Tank'.");
+                                    System.out.println();
+                                    System.out.println();
+                                    System.out.println();
+                                    output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                                } else {
+                                    gameBoard.getCard(cardAttackedX, cardAttackedY).setHealth(gameBoard.getCard(cardAttackedX, cardAttackedY).getHealth() - gameBoard.getCard(cardAttackerX, cardAttackerY).getAttackDamage());
+                                    gameBoard.getCard(cardAttackerX, cardAttackerY).setFrozen(2);
+                                    gameBoard.cleanRow(cardAttackedX);
+
+
+                                }
+                            }
+                        }
+
+
+                        break;
+                    case "cardUsesAbility":
+                        cardAttackerX = actions.get(j).getCardAttacker().getX();
+                        cardAttackerY = actions.get(j).getCardAttacker().getY();
+                        cardAttackedX = actions.get(j).getCardAttacked().getX();
+                        cardAttackedY = actions.get(j).getCardAttacked().getY();
+
+
+                        if (gameBoard.getCard(cardAttackerX,cardAttackerY) != null &&
+                                gameBoard.getCard(cardAttackedX,cardAttackedY) != null) {
+                            System.out.println("---ATTACKER CARD:------" + gameBoard.getCard(cardAttackerX,cardAttackerY) + "--ATTACK--" +
+                                    gameBoard.getCard(cardAttackerX,cardAttackerY).getAttackDamage());
+                            if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 1) {
+                                System.out.println("------EXCEPTIA 1-----");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacker card is frozen.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else if (gameBoard.getCard(cardAttackerX, cardAttackerY).getFrozen() == 2) {
+                                System.out.println("-----EXCEPTIA 2-------");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacker card has already attacked this turn.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else if ((playerTurn == 1 && cardAttackedX > 1) || (playerTurn == 2 && cardAttackedX <= 1)
+                                        && !gameBoard.getCard(cardAttackerX, cardAttackerY).getName().equals("Disciple")) {
+                                System.out.println("-----EXCEPTIA 3-----");
+                                System.out.println();
+                                System.out.println();
+                                System.out.println();
+                                cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                        cardAttackedY, "Attacked card does not belong to the enemy.");
+                                output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                            } else {
+                                if (gameBoard.getCard(cardAttackerX, cardAttackerY).getName().equals("Disciple")) {
+                                    if ((playerTurn == 1 && cardAttackedX <= 1) || (playerTurn == 2 && cardAttackedX > 1)) {
+                                        cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                                cardAttackedY, "Attacked card does not belong to the current player.");
+                                        output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                                    } else {
+                                    ((Disciple) gameBoard.getCard(cardAttackerX, cardAttackerY)).cardUsesAbility(cardAttackedX, cardAttackedY);
+                                    gameBoard.getCard(cardAttackerX, cardAttackerY).setFrozen(2);
+                                    }
+                                } else {
+                                    boolean rowHasTank = gameBoard.containsTank(playerTurn);
+
+                                    if (rowHasTank == true && !gameBoard.getCard(cardAttackedX, cardAttackedY).getName().equals("Goliath")
+                                            && !gameBoard.getCard(cardAttackedX, cardAttackedY).getName().equals("Warden")) {
+                                        cardUsesAttack = new commandCardUsesAttack(command, cardAttackerX, cardAttackerY, cardAttackedX,
+                                                cardAttackedY, "Attacked card is not of type 'Tank'.");
+                                        System.out.println();
+                                        System.out.println();
+                                        System.out.println();
+                                        output.add(objectMapper.convertValue(cardUsesAttack, JsonNode.class));
+                                    } else {
+                                        String name =  gameBoard.getCard(cardAttackerX, cardAttackerY).getName();
+
+                                        switch (name) {
+                                            case "The Ripper":
+                                                ((TheRipper) gameBoard.getCard(cardAttackerX, cardAttackerY)).cardUsesAbility(cardAttackedX,cardAttackedY);
+                                                gameBoard.cleanRow(cardAttackedX);
+                                                break;
+                                            case "Miraj":
+                                                ((Miraj) gameBoard.getCard(cardAttackerX, cardAttackerY)).cardUsesAbility(cardAttackedX, cardAttackedY);
+                                                break;
+                                            case "The Cursed One":
+                                                ((TheCursedOne) gameBoard.getCard(cardAttackerX, cardAttackerY)).cardUsesAbility(cardAttackedX,cardAttackedY);
+                                                gameBoard.cleanRow(cardAttackedX);
+                                                break;
+                                        }
+                                        gameBoard.getCard(cardAttackerX, cardAttackerY).setFrozen(2);
+                                        gameBoard.cleanRow(cardAttackedX);
+                                    }
+                                }
+
+                            }
+                        }
 
                         break;
                     case "someActionIdk":

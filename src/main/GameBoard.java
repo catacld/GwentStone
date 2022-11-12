@@ -40,7 +40,7 @@ public class GameBoard {
 
     public MinionCard getCard(int x, int y) {
 
-        if (y == gameBoard.get(x).size()) {
+        if (y >= gameBoard.get(x).size()) {
             return null;
         } else {
             return gameBoard.get(x).get(y);
@@ -55,6 +55,18 @@ public class GameBoard {
             return -1;
         } else {
             gameBoard.get(rowIndex).add(card);
+
+            for(int i =0; i < 4; i++) {
+                for (int w =0; w < gameBoard.get(i).size(); w++) {
+                    System.out.println("---ROW " + i + "---COLUMN " + w + "---CARD: " + gameBoard.get(i).get(w) + "HEALTH: " + gameBoard.get(i).get(w).getHealth()
+                            + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage());
+                }
+                //System.out.println();
+            }
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
             return 1;
         }
 
@@ -108,6 +120,13 @@ public class GameBoard {
     }
 
 
+    public void freezeRow(int affectedRow) {
+        for (int i = 0; i < gameBoard.get(affectedRow).size(); i++) {
+            gameBoard.get(affectedRow).get(i).setFrozen(1);
+        }
+    }
+
+
     public ArrayList<MinionCard> getFrozenCards() {
 
         ArrayList<MinionCard> frozenCards = new ArrayList<>();
@@ -117,13 +136,36 @@ public class GameBoard {
             int size = gameBoard.get(i).size();
 
             for (int j = 0; j < size; j++) {
-                if (gameBoard.get(i).get(j).isFrozen() == true) {
+                if (gameBoard.get(i).get(j).getFrozen() == 1) {
                     frozenCards.add(gameBoard.get(i).get(j));
                 }
             }
         }
 
         return frozenCards;
+    }
+
+    public boolean containsTank(int playerIdx) {
+        int startRow;
+        int endRow;
+
+        if (playerIdx == 1) {
+            startRow = 0;
+            endRow = 1;
+        } else {
+            startRow = 2;
+            endRow = 3;
+        }
+        for (int i = startRow; i <= endRow; i++) {
+            for (int j = 0; j < gameBoard.get(i).size(); j++) {
+                if (gameBoard.get(i).get(j).getName().equals("Goliath") ||
+                    gameBoard.get(i).get(j).getName().equals("Warden")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 
@@ -137,15 +179,41 @@ public class GameBoard {
                 i--;
             }
         }
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("------AFTER CLEANING-----");
+
+        for (int i = 0; i < 4; i++) {
+            for (int w = 0; w < gameBoard.get(i).size(); w++) {
+                System.out.println("---ROW " + i + "---COLUMN " + w + "---CARD: " + gameBoard.get(i).get(w) + "HEALTH: " + gameBoard.get(i).get(w).getHealth()
+                        + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage());
+            }
+        }
+
+
+        System.out.println("------AFTER CLEANING DONE-----");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
 
-    public void unfreezeAll() {
-        for (int i = 0; i < 4; i++) {
+    public void unfreeze(int playerIdx) {
+        int startRow;
+        int endRow;
+
+        if (playerIdx == 2) {
+            startRow = 0;
+            endRow = 1;
+        } else {
+            startRow = 2;
+            endRow = 3;
+        }
+        for (int i = startRow; i <= endRow; i++) {
             for (int j = 0; j < gameBoard.get(i).size(); j++) {
-                if (gameBoard.get(i).get(j) instanceof MinionCard) {
-                    gameBoard.get(i).get(j).setFrozen(false);
-                }
+                    gameBoard.get(i).get(j).setFrozen(0);
             }
         }
     }

@@ -17,6 +17,6 @@ public class LordRoyce extends HeroCard {
 
     public void useHeroAbility(int affectedRow) {
         MinionCard maxAttackCard = board.getMaxAttackCard(affectedRow);
-        maxAttackCard.setFrozen(true);
+        maxAttackCard.setFrozen(1);
     }
 }

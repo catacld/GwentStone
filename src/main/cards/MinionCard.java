@@ -17,13 +17,13 @@ public class MinionCard extends Card{
 
     //check if a card is frozen
     @JsonIgnore
-    private boolean frozen;
+    private int frozen;
 
     public MinionCard(int mana, String description, ArrayList<String> colors, String name, int health, int attackDamage, int playerId, int boardPosition) {
         super(mana, description, colors, name, playerId);
         this.health = health;
         this.attackDamage = attackDamage;
-        this.frozen = false;
+        this.frozen = 0;
         this.boardPosition = boardPosition;
     }
 
@@ -43,11 +43,11 @@ public class MinionCard extends Card{
         this.attackDamage = attackDamage;
     }
 
-    public boolean isFrozen() {
+    public int getFrozen() {
         return frozen;
     }
 
-    public void setFrozen(boolean frozen) {
+    public void setFrozen(int frozen) {
         this.frozen = frozen;
     }
 

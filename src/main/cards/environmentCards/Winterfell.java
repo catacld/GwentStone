@@ -17,13 +17,7 @@ public class Winterfell extends Card{
         this.board = GameBoard.getInstance();
     }
 
-    public int useAbility(int affectedRow) {
-        ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
-
-        for (MinionCard curr : cardsOnRow) {
-            curr.setFrozen(true);
-        }
-
-        return 1;
+    public void useAbility(int affectedRow) {
+        board.freezeRow(affectedRow);
     }
 }
