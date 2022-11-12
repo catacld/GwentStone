@@ -17,11 +17,13 @@ public class Winterfell extends Card{
         this.board = GameBoard.getInstance();
     }
 
-    public void useEnvironmentCard(int affectedRow) {
+    public int useAbility(int affectedRow) {
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
         for (MinionCard curr : cardsOnRow) {
             curr.setFrozen(true);
         }
+
+        return 1;
     }
 }

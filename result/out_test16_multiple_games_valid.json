@@ -1,4 +1,15 @@
 [ {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ ]
+}, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
@@ -16,15 +27,42 @@
     "name" : "Berserker"
   }
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "output" : 1,
   "playerIdx" : 2
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "mana" : 1,
+    "description" : "Premium card: The fury of hell is upon us, please kill us.",
+    "colors" : [ "Blue", "Green", "White" ],
+    "name" : "Firestorm"
+  } ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
+}, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "output" : {
@@ -119,6 +157,9 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getCardAtPosition",
   "output" : {
     "mana" : 2,
@@ -137,6 +178,20 @@
   "output" : 7,
   "playerIdx" : 2
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "mana" : 1,
+    "description" : "Premium card: The fury of hell is upon us, please kill us.",
+    "colors" : [ "Blue", "Green", "White" ],
+    "name" : "Firestorm"
+  }, {
+    "mana" : 1,
+    "description" : "Premium card: The fury of hell is upon us, please kill us.",
+    "colors" : [ "Blue", "Green", "White" ],
+    "name" : "Firestorm"
+  } ]
+}, {
   "command" : "getCardAtPosition",
   "output" : {
     "mana" : 2,
@@ -154,6 +209,9 @@
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getCardAtPosition",
   "output" : {
     "mana" : 2,
@@ -164,6 +222,9 @@
     "name" : "The Cursed One"
   }
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getCardAtPosition",
   "output" : {
     "mana" : 2,
@@ -173,6 +234,9 @@
     "colors" : [ "Brown", "Black", "Grey" ],
     "name" : "Goliath"
   }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "output" : 8,

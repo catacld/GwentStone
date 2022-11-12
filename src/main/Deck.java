@@ -156,14 +156,10 @@ public class Deck {
         return deck.get(index);
     }
 
-    // unfreeze the cards
-    public void endTurn() {
-        for (Card card : deck) {
-            if (card instanceof MinionCard) {
-                ((MinionCard) card).setFrozen(false);
-            }
-        }
-    }
+
+
+
+
 
     public void shuffle(int seed) {
         Random random = new Random(seed);

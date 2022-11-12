@@ -15,4 +15,10 @@ public class HeartHound extends Card {
         super(mana, description, colors, "Heart Hound", playerId);
         this.board = GameBoard.getInstance();
     }
+
+    public int useAbility(int rowIndex, int ownRow) {
+
+        board.placeCard(ownRow, board.getRow(rowIndex).remove(board.getMaxHealthCard(rowIndex)));
+        return 1;
+    }
 }

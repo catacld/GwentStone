@@ -6,6 +6,13 @@
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
@@ -16,8 +23,32 @@
   "output" : 3,
   "playerIdx" : 1
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
+}, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "output" : 0,
@@ -36,6 +67,18 @@
     "name" : "Miraj"
   }
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
+}, {
   "command" : "getPlayerMana",
   "output" : 3,
   "playerIdx" : 1
@@ -53,12 +96,28 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "output" : 3,
   "playerIdx" : 1
 }, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "output" : {
@@ -83,9 +142,26 @@
     "name" : "Miraj"
   }
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "output" : 8,
   "playerIdx" : 1
+}, {
+  "command" : "getEnvironmentCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  }, {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Green", "Black" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getCardAtPosition",
   "output" : {
@@ -96,6 +172,9 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker"
   }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "output" : 4,

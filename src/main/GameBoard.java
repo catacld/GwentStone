@@ -3,6 +3,7 @@ package main;
 import main.cards.Card;
 import main.cards.MinionCard;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameBoard {
@@ -59,6 +60,8 @@ public class GameBoard {
 
     }
 
+
+
     public void deleteCard(int x, int y) {
         gameBoard.get(x).remove(y);
     }
@@ -102,6 +105,38 @@ public class GameBoard {
 
     public ArrayList<ArrayList<MinionCard>> getGameBoard() {
         return gameBoard;
+    }
+
+
+    public ArrayList<MinionCard> getFrozenCards() {
+
+        ArrayList<MinionCard> frozenCards = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+
+            int size = gameBoard.get(i).size();
+
+            for (int j = 0; j < size; j++) {
+                if (gameBoard.get(i).get(j).isFrozen() == true) {
+                    frozenCards.add(gameBoard.get(i).get(j));
+                }
+            }
+        }
+
+        return frozenCards;
+    }
+
+
+    public void cleanRow(int affectedRow) {
+        int size = gameBoard.get(affectedRow).size();
+
+        for (int i = 0; i < size; i++) {
+            if (gameBoard.get(affectedRow).get(i).getHealth() <= 0) {
+                gameBoard.get(affectedRow).remove(i);
+                size--;
+                i--;
+            }
+        }
     }
 
 

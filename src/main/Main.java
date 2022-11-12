@@ -19,6 +19,9 @@ import java.util.ArrayList;
 
 import main.cards.Card;
 import main.cards.MinionCard;
+import main.cards.environmentCards.Firestorm;
+import main.cards.environmentCards.HeartHound;
+import main.cards.environmentCards.Winterfell;
 import main.outputClasses.*;
 
 /**
@@ -243,9 +246,9 @@ public final class Main {
 
                         //checking errors
 
-                        if(player.getCardsInHand().get(handIdx).getName() == "Firestorm" ||
-                                player.getCardsInHand().get(handIdx).getName() == "Winterfell" ||
-                                player.getCardsInHand().get(handIdx).getName() == "Heart Hound") {
+                        if(player.getCardsInHand().get(handIdx).getName().equals("Firestorm")||
+                                player.getCardsInHand().get(handIdx).getName().equals("Winterfell") ||
+                                player.getCardsInHand().get(handIdx).getName().equals("Heart Hound")) {
                             commandPlaceCard commandPlace = new commandPlaceCard(command, handIdx, "Cannot place environment card on table.");
                             output.add(objectMapper.convertValue(commandPlace, JsonNode.class));
                         } else if (player.getCardsInHand().get(handIdx).getMana() >
@@ -294,7 +297,72 @@ public final class Main {
 
                         output.add(objectMapper.convertValue(commandGetCard, JsonNode.class));
 
+                        break;
+                    case "getEnvironmentCardsInHand":
+                        playerIdx =  actions.get(j).getPlayerIdx();
+                        commandGetEnvCards getEnvCards;
+                        if (playerIdx == 1) {
+                            getEnvCards = new commandGetEnvCards(command,playerIdx,player1.getEnvironmentCards());
+                        } else {
+                            getEnvCards = new commandGetEnvCards(command,playerIdx,player2.getEnvironmentCards());
+                        }
+                        output.add(objectMapper.convertValue(getEnvCards, JsonNode.class));
+                        break;
+                    case "useEnvironmentCard":
+                        handIdx = actions.get(j).getHandIdx();
+                        int affectedRow = actions.get(j).getAffectedRow();
 
+                        if (playerTurn == 1) {
+                            player = player1;
+                        } else {
+                            player = player2;
+                        }
+
+                        if (!player.getCardsInHand().get(handIdx).getName().equals("Firestorm") &&
+                                !player.getCardsInHand().get(handIdx).getName().equals("Winterfell") &&
+                                !player.getCardsInHand().get(handIdx).getName().equals("Heart Hound")) {
+                            commandUseEnvCard useEnvCard = new commandUseEnvCard(command, handIdx, affectedRow, "Chosen card is not of type environment.");
+                            output.add(objectMapper.convertValue(useEnvCard, JsonNode.class));
+                        } else if (player.getCardsInHand().get(handIdx).getMana() >
+                                player.getMana()) {
+                            commandUseEnvCard useEnvCard = new commandUseEnvCard(command, handIdx, affectedRow, "Not enough mana to use environment card.");
+                            output.add(objectMapper.convertValue(useEnvCard, JsonNode.class));
+                        } else if ((playerTurn == 1 && affectedRow >= 2) || (playerTurn == 2 && affectedRow < 2)) {
+                            commandUseEnvCard useEnvCard = new commandUseEnvCard(command, handIdx, affectedRow, "Chosen row does not belong to the enemy.");
+                            output.add(objectMapper.convertValue(useEnvCard, JsonNode.class));
+                        } else if (player.getCardsInHand().get(handIdx).getName().equals("Heart Hound") &&
+                                    gameBoard.getRow(2 * (playerTurn % 2)+(1-(affectedRow%2))).size()==5) {
+                            commandUseEnvCard useEnvCard = new commandUseEnvCard(command, handIdx, affectedRow, "Cannot steal enemy card since the player's row is full.");
+                            output.add(objectMapper.convertValue(useEnvCard, JsonNode.class));
+                        } else {
+
+                            String cardName = player.getCardsInHand().get(handIdx).getName();
+
+                            switch (cardName) {
+                                case "Firestorm":
+                                    ((Firestorm) player.getCardsInHand().get(handIdx)).useAbility(affectedRow);
+                                    break;
+                                case "Winterfell":
+                                    ((Winterfell) player.getCardsInHand().get(handIdx)).useAbility(affectedRow);
+                                    break;
+                                case "Heart Hound":
+                                    ((HeartHound) player.getCardsInHand().get(handIdx)).useAbility(affectedRow, 2 * (playerTurn % 2)+1-(affectedRow%2));
+                                    break;
+                        }
+                            player.setMana(player.getMana()-player.getCardsInHand().get(handIdx).getMana());
+                            player.getCardsInHand().remove(handIdx);
+                        }
+
+                        break;
+                    case "getFrozenCardsOnTable":
+                        commandGetFrozenTable frozenTable = new commandGetFrozenTable(command, gameBoard.getFrozenCards());
+                        output.add(objectMapper.convertValue(frozenTable, JsonNode.class));
+                        break;
+                    case "cardUsesAttack":
+                        int cardAttackerX = actions.get(j).getCardAttacker().getX();
+                        int cardAttackerY = actions.get(j).getCardAttacker().getY();
+                        int cardAttackedX = actions.get(j).getCardAttacked().getX();
+                        int cardAttackedY = actions.get(j).getCardAttacked().getY();
 
                         break;
                     case "someActionIdk":

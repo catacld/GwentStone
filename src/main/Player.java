@@ -142,6 +142,21 @@ public class Player {
         this.deck = new Deck(decks.get(index), this.id);
     }
 
+    public ArrayList<Card> getEnvironmentCards() {
+
+        ArrayList<Card> environmentCards = new ArrayList<>();
+
+        for (Card card : cardsInHand) {
+            if (card.getName().equals("Firestorm") ||
+                    card.getName().equals("Heart Hound") ||
+                    card.getName().equals("Winterfell")) {
+                environmentCards.add(card);
+            }
+        }
+
+        return environmentCards;
+    }
+
     public void addInHand(Card card) {
         cardsInHand.add(card);
     }

@@ -72,8 +72,6 @@ public class Card {
     }
 
     // workaround for environment cards
-    public void useAbility(int rowIndex) {
-    }
 
 
 
