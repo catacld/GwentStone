@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Firestorm extends Card {
 
     @JsonIgnore
-    public GameBoard board;
+    private GameBoard board;
 
     public Firestorm(int mana, String description, ArrayList<String> colors, int playerId) {
         super(mana, description, colors, "Firestorm", playerId);
@@ -29,7 +29,11 @@ public class Firestorm extends Card {
         return 1;
     }
 
+    public GameBoard getBoard() {
+        return board;
+    }
 
-
-
+    public void setBoard(GameBoard board) {
+        this.board = board;
+    }
 }

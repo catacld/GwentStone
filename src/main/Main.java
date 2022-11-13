@@ -326,14 +326,17 @@ public final class Main {
 
                         Card card = gameBoard.getCard(x,y);
                         commandGetCardAtPos commandGetCard;
+                        commandGetCardAtPosError commandGetCardAtError;
 
                         if (card == null) {
-                            commandGetCard = new commandGetCardAtPos(command,null, "No card at that position.");
+                            commandGetCardAtError = new commandGetCardAtPosError(command, "No card available at that position.", x, y);
+                            output.add(objectMapper.convertValue(commandGetCardAtError, JsonNode.class));
                         } else {
-                            commandGetCard = new commandGetCardAtPos(command,card, null);
+                            commandGetCard = new commandGetCardAtPos(command,card,x,y);
+                            output.add(objectMapper.convertValue(commandGetCard, JsonNode.class));
                         }
 
-                        output.add(objectMapper.convertValue(commandGetCard, JsonNode.class));
+
 
                         break;
                     case "getEnvironmentCardsInHand":

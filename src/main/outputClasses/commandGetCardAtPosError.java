@@ -1,22 +1,16 @@
 package main.outputClasses;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import main.cards.Card;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class commandGetCardAtPos {
+public class commandGetCardAtPosError {
 
     private String command;
 
-    private Card output;
+    private String output;
 
-    int x;
+    private int x;
 
-    int y;
+    private int y;
 
-
-
-    public commandGetCardAtPos(String command,Card output, int x, int y) {
+    public commandGetCardAtPosError(String command, String output, int x, int y) {
         this.command = command;
         this.output = output;
         this.x = x;
@@ -31,11 +25,11 @@ public class commandGetCardAtPos {
         this.command = command;
     }
 
-    public Card getOutput() {
+    public String getOutput() {
         return output;
     }
 
-    public void setOutput(Card output) {
+    public void setOutput(String output) {
         this.output = output;
     }
 

@@ -16,7 +16,7 @@ public class Card {
 
     // check which player has the card
     @JsonIgnore
-    private int playerId;
+    private final int playerId;
 
 
     public Card(final int mana, final String description, final ArrayList<String> colors,
@@ -29,43 +29,45 @@ public class Card {
     }
 
 
+    /**
+     * @return mana
+     */
     public int getMana() {
         return mana;
     }
 
+    /**
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
 
 
+    /**
+     * @return colors
+     */
     public ArrayList<String> getColors() {
         return colors;
     }
 
 
+    /**
+     * @return name
+     */
     public String getName() {
         return name;
     }
+
+    /**
+     * @return playerId
+     */
 
     public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
-    // workaround for environment cards
 
 
 
-    @Override
-    public String toString() {
-        return "Card{" +
-                "mana=" + mana +
-                ", description='" + description + '\'' +
-                ", colors=" + colors +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

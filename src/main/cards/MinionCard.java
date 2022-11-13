@@ -8,8 +8,8 @@ import java.util.ArrayList;
 @JsonPropertyOrder({ "mana", "attackDamage", "health", "description", "colors", "name"})
 public class MinionCard extends Card{
 
-    private int health;
-    private int attackDamage;
+    private  int health;
+    private  int attackDamage;
 
     @JsonIgnore
     private int boardPosition;
@@ -19,7 +19,7 @@ public class MinionCard extends Card{
     @JsonIgnore
     private int frozen;
 
-    public MinionCard(int mana, String description, ArrayList<String> colors, String name, int health, int attackDamage, int playerId, int boardPosition) {
+    public MinionCard(final int mana, final String description, final ArrayList<String> colors, final String name, final int health, final int attackDamage, final int playerId, final int boardPosition) {
         super(mana, description, colors, name, playerId);
         this.health = health;
         this.attackDamage = attackDamage;
