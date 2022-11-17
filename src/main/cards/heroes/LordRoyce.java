@@ -16,7 +16,11 @@ public class LordRoyce extends HeroCard {
     }
 
     public void useHeroAbility(int affectedRow) {
+        // get the card with the maximum attack damage
+        // placed on the affected row
         MinionCard maxAttackCard = board.getMaxAttackCard(affectedRow);
+
+        // freeze the card
         maxAttackCard.setFrozen(1);
     }
 }

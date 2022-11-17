@@ -3,7 +3,6 @@ package main.cards.environmentCards;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import main.GameBoard;
 import main.cards.Card;
-import main.cards.MinionCard;
 
 import java.util.ArrayList;
 
@@ -18,6 +17,7 @@ public class Winterfell extends Card{
     }
 
     public void useAbility(int affectedRow) {
+        // freeze the entire row
         board.freezeRow(affectedRow);
     }
 }

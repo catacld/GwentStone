@@ -16,8 +16,11 @@ public class EmpressThorina extends HeroCard {
     }
 
     public void useHeroAbility(int affectedRow) {
-        int maximumIndex = board.getMaxHealthCard(affectedRow);
-        ArrayList<ArrayList<MinionCard>> gameBoard = board.getGameBoard();
-        gameBoard.get(affectedRow).remove(maximumIndex);
+
+        // get the index of the card with maximum health
+        int index = board.getMaxHealthCard(affectedRow);
+
+        // remove the card with maximum health placed on the affected row
+        board.getGameBoard().get(affectedRow).remove(index);
     }
 }

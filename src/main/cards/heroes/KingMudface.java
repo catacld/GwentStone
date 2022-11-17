@@ -16,8 +16,10 @@ public class KingMudface extends HeroCard {
     }
 
     public void useHeroAbility(int affectedRow) {
+        // get the cards on the affected row
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
+        // use the ability on every cards on the row
         for (MinionCard curr : cardsOnRow) {
             curr.setHealth(curr.getHealth() + 1);
         }

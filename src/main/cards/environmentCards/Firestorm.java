@@ -17,16 +17,17 @@ public class Firestorm extends Card {
         this.board = GameBoard.getInstance();
     }
 
-    public int useAbility(int affectedRow) {
+    public void useAbility(int affectedRow) {
+        // get the row of cards
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
+        // decrease each card's health
         for (MinionCard curr : cardsOnRow) {
             curr.setHealth(curr.getHealth() - 1);
         }
 
+        // delete the cards that have no health left
         board.cleanRow(affectedRow);
-
-        return 1;
     }
 
     public GameBoard getBoard() {

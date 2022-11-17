@@ -1,21 +1,21 @@
 package main.cards;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
 
-@JsonPropertyOrder({ "mana", "attackDamage", "health", "description", "colors", "name"})
 public class MinionCard extends Card{
 
     private  int health;
     private  int attackDamage;
 
+    // the rows where the card can be placed
+    // depending on the number of the player who owns the card
     @JsonIgnore
     private int boardPosition;
 
 
-    //check if a card is frozen
+    //check whether the card is able to attack or not
     @JsonIgnore
     private int frozen;
 
@@ -55,7 +55,4 @@ public class MinionCard extends Card{
         return boardPosition;
     }
 
-    public void setBoardPosition(int boardPosition) {
-        this.boardPosition = boardPosition;
-    }
 }

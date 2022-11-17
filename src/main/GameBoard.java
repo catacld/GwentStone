@@ -1,9 +1,7 @@
 package main;
 
-import main.cards.Card;
 import main.cards.MinionCard;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameBoard {
@@ -23,8 +21,8 @@ public class GameBoard {
 
     }
 
-    // we make the class singleton since we always
-    // refer to the same gameboard
+    // make the class singleton since the same gameboard
+    // is always referred to
     public static GameBoard getInstance() {
 
         if (instance == null) {
@@ -38,75 +36,63 @@ public class GameBoard {
         GameBoard.instance = instance;
     }
 
+    // get the card placed at (x,y) on the game board
     public MinionCard getCard(int x, int y) {
 
+        // if there is no card placed return null
         if (y >= gameBoard.get(x).size()) {
             return null;
-        } else {
+        } else { // else return the card
             return gameBoard.get(x).get(y);
         }
     }
 
-
+    // place a card on the game board
     public int placeCard(int rowIndex, MinionCard card) {
-
-
+        // check if the row is full
         if (gameBoard.get(rowIndex).size() == 5) {
             return -1;
-        } else {
+        } else { // if not then place the card
             gameBoard.get(rowIndex).add(card);
-
-            for(int i =0; i < 4; i++) {
-                for (int w =0; w < gameBoard.get(i).size(); w++) {
-                    System.out.println("---ROW " + i + "---COLUMN " + w + "---CARD: " + gameBoard.get(i).get(w) + "HEALTH: " + gameBoard.get(i).get(w).getHealth()
-                            + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage() + "MANA-----" + gameBoard.get(i).get(w).getMana());
-                }
-                //System.out.println();
-            }
-
-            System.out.println();
-            System.out.println();
-            System.out.println();
             return 1;
         }
-
     }
 
-
-
-    public void deleteCard(int x, int y) {
-        gameBoard.get(x).remove(y);
-    }
-
-
-    // get cards from a row
+    // get the cards placed on a row of the game board
     public ArrayList<MinionCard> getRow(int rowIndex) {
-
 
         return gameBoard.get(rowIndex);
 
     }
 
+    // get the card with the maximum attack damage
+    // from the row of index "index"
     public MinionCard getMaxAttackCard(int index) {
         int maximum = Integer.MIN_VALUE;
         MinionCard maxCard = null;
 
+        // traverse the entire row of the game board
         for (int i = 0; i < gameBoard.get(index).size() ; i++) {
+            // check for maximum
             if (gameBoard.get(index).get(i).getAttackDamage() > maximum) {
                 maximum = gameBoard.get(index).get(i).getAttackDamage();
                 maxCard = gameBoard.get(index).get(i);
             }
         }
 
+        // return the card with maximum attack damage
         return maxCard;
     }
 
+    // similar to the "getMaxAttackCard" method
     public int getMaxHealthCard(int index) {
         int maximum = Integer.MIN_VALUE;
         int maxHealthIndex = -1;
 
+        // traverse the entire row of the game board
         for (int i = 0; i < gameBoard.get(index).size() ; i++) {
             if (gameBoard.get(index).get(i).getHealth() > maximum) {
+                // check for maximum
                 maximum = gameBoard.get(index).get(i).getHealth();
                 maxHealthIndex = i;
             }
@@ -120,6 +106,7 @@ public class GameBoard {
     }
 
 
+    // freeze an entire row of the game board
     public void freezeRow(int affectedRow) {
         for (int i = 0; i < gameBoard.get(affectedRow).size(); i++) {
             gameBoard.get(affectedRow).get(i).setFrozen(1);
@@ -127,15 +114,19 @@ public class GameBoard {
     }
 
 
+    // get all the frozen cards from the game board
     public ArrayList<MinionCard> getFrozenCards() {
 
         ArrayList<MinionCard> frozenCards = new ArrayList<>();
 
+        // traverse the entire game board and search for frozen cards
         for (int i = 0; i < 4; i++) {
 
             int size = gameBoard.get(i).size();
 
+            // traverse each row of the game board
             for (int j = 0; j < size; j++) {
+                // check if the card is frozen
                 if (gameBoard.get(i).get(j).getFrozen() == 1) {
                     frozenCards.add(gameBoard.get(i).get(j));
                 }
@@ -146,20 +137,17 @@ public class GameBoard {
     }
 
     public boolean containsTank(int playerIdx) {
-        int startRow;
-        int endRow;
+        // get the enemy player's part of the game board
+        int startRow = playerIdx - playerIdx % 2;
+        int endRow = startRow + 1;
 
-        if (playerIdx == 1) {
-            startRow = 0;
-            endRow = 1;
-        } else {
-            startRow = 2;
-            endRow = 3;
-        }
+
+        // check the entire part of the game board belonging to the player
+        // for tank cards
         for (int i = startRow; i <= endRow; i++) {
             for (int j = 0; j < gameBoard.get(i).size(); j++) {
                 if (gameBoard.get(i).get(j).getName().equals("Goliath") ||
-                    gameBoard.get(i).get(j).getName().equals("Warden")) {
+                        gameBoard.get(i).get(j).getName().equals("Warden")) {
                     return true;
                 }
             }
@@ -170,50 +158,32 @@ public class GameBoard {
 
 
     public void cleanRow(int affectedRow) {
-        int size = gameBoard.get(affectedRow).size();
 
-        for (int i = 0; i < size; i++) {
+        // get the number of cards that are on the row
+        int numberOfCards = gameBoard.get(affectedRow).size();
+
+        // delete the cards that no longer have health points
+        for (int i = 0; i < numberOfCards; i++) {
             if (gameBoard.get(affectedRow).get(i).getHealth() <= 0) {
                 gameBoard.get(affectedRow).remove(i);
-                size--;
+                numberOfCards--;
                 i--;
             }
         }
 
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println("------AFTER CLEANING-----");
-
-        for (int i = 0; i < 4; i++) {
-            for (int w = 0; w < gameBoard.get(i).size(); w++) {
-                System.out.println("---ROW " + i + "---COLUMN " + w + "---CARD: " + gameBoard.get(i).get(w) + "HEALTH: " + gameBoard.get(i).get(w).getHealth()
-                        + "ATTACK---" + gameBoard.get(i).get(w).getAttackDamage());
-            }
-        }
-
-
-        System.out.println("------AFTER CLEANING DONE-----");
-        System.out.println();
-        System.out.println();
-        System.out.println();
     }
 
 
     public void unfreeze(int playerIdx) {
-        int startRow;
-        int endRow;
 
-        if (playerIdx == 2) {
-            startRow = 0;
-            endRow = 1;
-        } else {
-            startRow = 2;
-            endRow = 3;
-        }
+        // get the player's part of the game board
+        int startRow = 2 * (playerIdx % 2);
+        int endRow = startRow + 1;
+
+        // unfreeze all the player's cards
         for (int i = startRow; i <= endRow; i++) {
             for (int j = 0; j < gameBoard.get(i).size(); j++) {
-                    gameBoard.get(i).get(j).setFrozen(0);
+                gameBoard.get(i).get(j).setFrozen(0);
             }
         }
     }

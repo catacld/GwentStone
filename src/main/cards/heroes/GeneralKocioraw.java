@@ -16,8 +16,10 @@ public class GeneralKocioraw extends HeroCard {
     }
 
     public void useHeroAbility(int affectedRow) {
+        // get the cards on the affected row
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
+        // use the ability on every card on the row
         for (MinionCard curr : cardsOnRow) {
             curr.setAttackDamage(curr.getAttackDamage()+1);
         }

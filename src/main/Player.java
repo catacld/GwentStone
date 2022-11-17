@@ -13,15 +13,17 @@ import main.cards.heroes.LordRoyce;
 
 public class Player {
 
-    // player id to check whether it is the player 1 or player 2
+    // player id to check whether it is player 1 or player 2
     private int id;
 
-    // statistics
+    // player's statistics
     private int gamesPlayed;
     private int gamesWon;
     private int mana;
     private int numberOfDecks;
 
+
+    // player's hero
     private HeroCard hero;
 
     // cards in player's hand
@@ -30,7 +32,7 @@ public class Player {
     // player's available decks
     private ArrayList<Deck> decks;
 
-    // deck selected for the game
+    // deck selected for the current game
     private Deck deck;
 
     private DecksInput decksData;
@@ -38,7 +40,6 @@ public class Player {
     public Player(int gamesPlayed, int gamesWon, int numberOfDecks, DecksInput decksData, int id) {
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;
-        // each player will get mana at the beginning of every round
         this.mana = 0;
         this.numberOfDecks = numberOfDecks;
         this.cardsInHand = new ArrayList<>();
@@ -53,6 +54,7 @@ public class Player {
         }
     }
 
+    // method to add a new deck to the player's decks
     public void addDeck(ArrayList<CardInput> deck, int id) {
         decks.add(new Deck(deck, id));
     }
@@ -69,10 +71,6 @@ public class Player {
         return gamesPlayed;
     }
 
-    public void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
-    }
-
     public int getGamesWon() {
         return gamesWon;
     }
@@ -81,21 +79,10 @@ public class Player {
         this.gamesWon = gamesWon;
     }
 
-    public int getNumberOfDecks() {
-        return numberOfDecks;
-    }
-
-    public void setNumberOfDecks(int numberOfDecks) {
-        this.numberOfDecks = numberOfDecks;
-    }
-
     public ArrayList<Card> getCardsInHand() {
         return cardsInHand;
     }
 
-    public void setCardsInHand(ArrayList<Card> cardsInHand) {
-        this.cardsInHand = cardsInHand;
-    }
 
     public ArrayList<Deck> getDecks() {
         return decks;
@@ -137,11 +124,12 @@ public class Player {
         return deck;
     }
 
-    // deep copy the deck chosen
+    // deep copy the deck at index "index"
     public void setDeck(int index) {
         this.deck = new Deck(decks.get(index), this.id);
     }
 
+    // get the environment cards that the player has in their hand
     public ArrayList<Card> getEnvironmentCards() {
 
         ArrayList<Card> environmentCards = new ArrayList<>();
@@ -157,18 +145,11 @@ public class Player {
         return environmentCards;
     }
 
-    public void addInHand(Card card) {
+
+    // add a new card to the player's hand
+    public void addToHand(Card card) {
         cardsInHand.add(card);
     }
 
 
-
-    // debug purpose remove after hw is done
-    public void printDeck() {
-        deck.printCards();
-    }
-
-    public void printHero() {
-        System.out.println(hero);
-    }
 }

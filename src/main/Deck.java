@@ -7,7 +7,6 @@ import main.cards.Card;
 import java.util.*;
 
 import fileio.CardInput;
-import main.cards.MinionCard;
 import main.cards.environmentCards.Firestorm;
 import main.cards.environmentCards.HeartHound;
 import main.cards.environmentCards.Winterfell;
@@ -22,10 +21,13 @@ public class Deck {
 
         for  (int i = 0; i < inputDeck.size(); i++) {
 
+            // parse the data from the json input file
             CardInput readCard = inputDeck.get(i);
             String nameOfCard = readCard.getName();
+
             Card card = null;
 
+            // instantiate a new card based on its name
             switch (nameOfCard) {
                 case "Disciple":
                     card = new Disciple(readCard.getMana(), readCard.getDescription(), readCard.getColors(),
@@ -70,6 +72,7 @@ public class Deck {
                     break;
             }
 
+            // add the newly instantiated card to the deck
             this.deck.add(card);
 
 
@@ -136,46 +139,28 @@ public class Deck {
 
     }
 
-
     public ArrayList<Card> getDeck() {
         return deck;
     }
-
-    public void setDeck(ArrayList<Card> deck) {
-        this.deck = deck;
-    }
-
-
 
     @JsonIgnore
     public int getSize() {
         return deck.size();
     }
 
+    // get the card at index "index" from the deck
     public Card getCard(int index) {
         return deck.get(index);
     }
 
-
-
-
-
-
+    // method used to shuffle the deck
     public void shuffle(int seed) {
         Random random = new Random(seed);
         Collections.shuffle(this.deck, random);
     }
 
-
-
+    // draw a card from the deck
     public Card drawCard() {
             return deck.remove(0);
-    }
-
-    //debug purpose remove after hw is done
-    public void printCards() {
-        for (int i = 0; i < deck.size(); i++) {
-            System.out.println(deck.get(i));
-        }
     }
 }

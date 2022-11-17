@@ -3,6 +3,7 @@ package main.cards.environmentCards;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import main.cards.Card;
 import main.GameBoard;
+import main.cards.MinionCard;
 
 import java.util.ArrayList;
 
@@ -16,9 +17,15 @@ public class HeartHound extends Card {
         this.board = GameBoard.getInstance();
     }
 
-    public int useAbility(int rowIndex, int ownRow) {
+    public void useAbility(int rowIndex, int ownRow) {
 
-        board.placeCard(ownRow, board.getRow(rowIndex).remove(board.getMaxHealthCard(rowIndex)));
-        return 1;
+        // get the index of the card with maximum health
+        int index = board.getMaxHealthCard(rowIndex);
+
+        // get the card with maximum health from the enemy's row
+        MinionCard card = board.getRow(rowIndex).remove(index);
+
+        // place the stolen card on a friendly row
+        board.placeCard(ownRow, card);
     }
 }

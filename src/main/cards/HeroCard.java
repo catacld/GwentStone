@@ -6,8 +6,10 @@ import java.util.ArrayList;
 
 public class HeroCard extends Card{
 
+    // each hero starts with 30 points of health
     private int health = 30;
 
+    // checker whether the hero is able to attack or not
     @JsonIgnore
     private int frozen;
 
@@ -36,10 +38,4 @@ public class HeroCard extends Card{
 
     }
 
-    //    @Override
-//    public String toString() {
-//        return "HeroCard{" +
-//                "health= \n" + health +
-//                '}';
-//    }
 }

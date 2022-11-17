@@ -14,7 +14,7 @@ public class Card {
     private final ArrayList<String> colors;
     private final String name;
 
-    // check which player has the card
+    // check which player the card belongs to
     @JsonIgnore
     private final int playerId;
 
