@@ -10,12 +10,17 @@ public class LordRoyce extends HeroCard {
 
     private GameBoard board;
 
-    public LordRoyce(int mana, String description, ArrayList<String> colors, int playerId) {
+    public LordRoyce(final int mana, final String description,
+                     final ArrayList<String> colors, final int playerId) {
         super(mana, description, colors, "Lord Royce", playerId);
         this.board = GameBoard.getInstance();
     }
 
-    public void useHeroAbility(int affectedRow) {
+    /**
+     * freeze the card with the maximum health placed
+     * on the row of index "affectedRow"
+     */
+    public void useHeroAbility(final int affectedRow) {
         // get the card with the maximum attack damage
         // placed on the affected row
         MinionCard maxAttackCard = board.getMaxAttackCard(affectedRow);

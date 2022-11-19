@@ -14,10 +14,10 @@ import main.cards.heroes.LordRoyce;
 public class Player {
 
     // player id to check whether it is player 1 or player 2
-    private int id;
+    private final int id;
 
     // player's statistics
-    private int gamesPlayed;
+    private final int gamesPlayed;
     private int gamesWon;
     private int mana;
     private int numberOfDecks;
@@ -37,10 +37,11 @@ public class Player {
 
     private DecksInput decksData;
 
-    public Player(int gamesPlayed, int gamesWon, int numberOfDecks, DecksInput decksData, int id) {
+    public Player(final int gamesPlayed, final int gamesWon, final int numberOfDecks,
+                  final DecksInput decksData, final int id) {
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;
-        this.mana = 0;
+        this.mana = 1;
         this.numberOfDecks = numberOfDecks;
         this.cardsInHand = new ArrayList<>();
         this.decks = new ArrayList<Deck>();
@@ -54,65 +55,112 @@ public class Player {
         }
     }
 
-    // method to add a new deck to the player's decks
-    public void addDeck(ArrayList<CardInput> deck, int id) {
-        decks.add(new Deck(deck, id));
+
+    /**
+     * called at the beginning of every game
+     * to prepare the player
+     */
+    public final void startNewGame(final int deckIdx, final int shuffleSeed,
+                                   final CardInput inputHero) {
+        // assign the player the chosen deck
+        this.setDeck(deckIdx);
+        // shuffle the deck
+        this.deck.shuffle(shuffleSeed);
+        // assign the player the chosen hero
+        this.setHero(inputHero);
+        // draw a card at the beginning of the first round
+        cardsInHand.add(deck.drawCard());
+
     }
 
-    public int getMana() {
+    /**
+     * method called at the beginning
+     * of every round
+     */
+    public void startNewRound(final int manaToReceive) {
+        // if there are cards left in the deck,
+        // draw one at the beginning of each round
+        if (this.deck.getSize() != 0) {
+            cardsInHand.add(deck.drawCard());
+        }
+        // player gets mana at the beginning of each round,
+        // but no more than 10
+        this.mana += Math.min(manaToReceive, 10);
+        // unfreeze the hero if it was frozen
+        this.hero.setFrozen(0);
+    }
+
+    /**
+     * add a new deck to the player's decks
+     */
+    public void addDeck(final ArrayList<CardInput> deckToAdd,
+                        final int idOfDeck) {
+        decks.add(new Deck(deckToAdd, idOfDeck));
+    }
+
+    public final int getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    public final void setMana(final int mana) {
         this.mana = mana;
     }
 
-    public int getGamesPlayed() {
+    public final int getGamesPlayed() {
         return gamesPlayed;
     }
 
-    public int getGamesWon() {
+    public final int getGamesWon() {
         return gamesWon;
     }
 
-    public void setGamesWon(int gamesWon) {
+    public final void setGamesWon(final int gamesWon) {
         this.gamesWon = gamesWon;
     }
 
-    public ArrayList<Card> getCardsInHand() {
+    public final ArrayList<Card> getCardsInHand() {
         return cardsInHand;
     }
 
 
-    public ArrayList<Deck> getDecks() {
+    public final ArrayList<Deck> getDecks() {
         return decks;
     }
 
-    public void setDecks(ArrayList<Deck> decks) {
+    public final void setDecks(final ArrayList<Deck> decks) {
         this.decks = decks;
     }
 
-    public HeroCard getHero() {
+    public final HeroCard getHero() {
         return hero;
     }
 
-    public void setHero(CardInput heroInput) {
+    /**
+     * set the hero of the player
+     */
+    public final void setHero(final CardInput heroInput) {
 
         String name = heroInput.getName();
         HeroCard newHero = null;
 
         switch (name) {
+            default:
+                break;
             case "Lord Royce":
-                newHero = new LordRoyce(heroInput.getMana(), heroInput.getDescription(), heroInput.getColors(), id);
+                newHero = new LordRoyce(heroInput.getMana(), heroInput.getDescription(),
+                                        heroInput.getColors(), id);
                 break;
             case "Empress Thorina":
-                newHero = new EmpressThorina(heroInput.getMana(), heroInput.getDescription(), heroInput.getColors(), id);
+                newHero = new EmpressThorina(heroInput.getMana(), heroInput.getDescription(),
+                                             heroInput.getColors(), id);
                 break;
             case "General Kocioraw":
-                newHero = new GeneralKocioraw(heroInput.getMana(), heroInput.getDescription(), heroInput.getColors(), id);
+                newHero = new GeneralKocioraw(heroInput.getMana(), heroInput.getDescription(),
+                                              heroInput.getColors(), id);
                 break;
             case "King Mudface":
-                newHero = new KingMudface(heroInput.getMana(), heroInput.getDescription(), heroInput.getColors(), id);
+                newHero = new KingMudface(heroInput.getMana(), heroInput.getDescription(),
+                                          heroInput.getColors(), id);
                 break;
         }
 
@@ -120,24 +168,28 @@ public class Player {
 
     }
 
-    public Deck getDeck() {
+    public final Deck getDeck() {
         return deck;
     }
 
-    // deep copy the deck at index "index"
-    public void setDeck(int index) {
+
+    /**
+     * deep copy the deck of index "index"
+     */
+    public final void setDeck(final int index) {
         this.deck = new Deck(decks.get(index), this.id);
     }
 
-    // get the environment cards that the player has in their hand
-    public ArrayList<Card> getEnvironmentCards() {
+
+    /**
+     * get the environment cards that the player has in their hand
+     */
+    public final ArrayList<Card> getEnvironmentCards() {
 
         ArrayList<Card> environmentCards = new ArrayList<>();
 
         for (Card card : cardsInHand) {
-            if (card.getName().equals("Firestorm") ||
-                    card.getName().equals("Heart Hound") ||
-                    card.getName().equals("Winterfell")) {
+            if (card.isEnvironmentCard()) {
                 environmentCards.add(card);
             }
         }
@@ -146,10 +198,11 @@ public class Player {
     }
 
 
-    // add a new card to the player's hand
-    public void addToHand(Card card) {
-        cardsInHand.add(card);
+    /**
+     * check if the player has enough
+     * mana to place a card
+     */
+    public final boolean hasMana(final Card card) {
+        return this.mana >= card.getMana();
     }
-
-
 }

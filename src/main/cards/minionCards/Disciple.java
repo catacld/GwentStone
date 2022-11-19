@@ -11,15 +11,20 @@ public class Disciple extends MinionCard {
     @JsonIgnore
     private GameBoard board;
 
-    public Disciple(int mana, String description, ArrayList<String> colors, int health, int attackDamage, int playerId) {
-        super(mana, description, colors,"Disciple", health, attackDamage, playerId, 2 * (playerId % 2) + playerId % 2);
+    public Disciple(final int mana, final String description, final ArrayList<String> colors,
+                    final int health, final int attackDamage, final int playerId) {
+        super(mana, description, colors,
+                "Disciple", health, attackDamage, playerId, 2 * (playerId % 2) + playerId % 2);
         this.board = GameBoard.getInstance();
     }
 
-    public void cardUsesAbility(int x, int y) {
+    /**
+     * increases the health of the target card by 2 points
+     */
+    public void cardUsesAbility(final int x, final int y) {
 
         // get the card placed at (x,y)
-        MinionCard targetCard = board.getCard(x,y);
+        MinionCard targetCard = board.getCard(x, y);
 
         // use the ability on the card
         targetCard.setHealth(targetCard.getHealth() + 2);
@@ -27,11 +32,11 @@ public class Disciple extends MinionCard {
 
 
 
-    public GameBoard getBoard() {
+    public final GameBoard getBoard() {
         return board;
     }
 
-    public void setBoard(GameBoard board) {
+    public final void setBoard(final GameBoard board) {
         this.board = board;
     }
 }

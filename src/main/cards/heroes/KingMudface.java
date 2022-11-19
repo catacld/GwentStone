@@ -10,13 +10,18 @@ public class KingMudface extends HeroCard {
 
     private GameBoard board;
 
-    public KingMudface(int mana, String description, ArrayList<String> colors, int playerId) {
+    public KingMudface(final int mana, final String description,
+                       final ArrayList<String> colors, final int playerId) {
         super(mana, description, colors, "King Mudface", playerId);
         this.board = GameBoard.getInstance();
     }
 
-    public void useHeroAbility(int affectedRow) {
-        // get the cards on the affected row
+    /**
+     * increase the health of every card on the row
+     * of index "affectedRow" by 1
+     */
+    public void useHeroAbility(final int affectedRow) {
+        // get the cards placed on the affected row
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
         // use the ability on every cards on the row

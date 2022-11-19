@@ -6,18 +6,27 @@ import main.cards.Card;
 
 import java.util.ArrayList;
 
-public class Winterfell extends Card{
+public class Winterfell extends Card {
 
     @JsonIgnore
-    public GameBoard board;
+    private GameBoard board;
 
-    public Winterfell(int mana, String description, ArrayList<String> colors, int playerId) {
+    public Winterfell(final int mana, final String description,
+                      final ArrayList<String> colors, final int playerId) {
         super(mana, description, colors, "Winterfell", playerId);
         this.board = GameBoard.getInstance();
     }
 
-    public void useAbility(int affectedRow) {
+    /**
+     * freeze all the cards placed on the row of index
+     * "affectedRow"
+     */
+    public void useAbility(final int affectedRow) {
         // freeze the entire row
         board.freezeRow(affectedRow);
+    }
+
+    public final GameBoard getBoard() {
+        return board;
     }
 }

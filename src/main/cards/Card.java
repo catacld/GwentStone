@@ -28,43 +28,37 @@ public class Card {
         this.playerId = playerId;
     }
 
-
-    /**
-     * @return mana
-     */
-    public int getMana() {
+    public final int getMana() {
         return mana;
     }
 
-    /**
-     * @return description
-     */
-    public String getDescription() {
+
+    public final String getDescription() {
         return description;
     }
 
-
-    /**
-     * @return colors
-     */
-    public ArrayList<String> getColors() {
+    public final ArrayList<String> getColors() {
         return colors;
     }
 
-
-    /**
-     * @return name
-     */
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    /**
-     * @return playerId
-     */
-
-    public int getPlayerId() {
+    public final int getPlayerId() {
         return playerId;
+    }
+
+    // check if the card is an evironment card
+    @JsonIgnore
+    public final boolean isEnvironmentCard() {
+        return name.equals("Firestorm") || name.equals("Winterfell") || name.equals("Heart Hound");
+    }
+
+    // check if the card is a tank card
+    @JsonIgnore
+    public final boolean isTank() {
+        return name.equals("Goliath") || name.equals("Warden");
     }
 
 

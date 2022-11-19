@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 
-public class MinionCard extends Card{
+public class MinionCard extends Card {
 
     private  int health;
     private  int attackDamage;
@@ -19,7 +19,9 @@ public class MinionCard extends Card{
     @JsonIgnore
     private int frozen;
 
-    public MinionCard(final int mana, final String description, final ArrayList<String> colors, final String name, final int health, final int attackDamage, final int playerId, final int boardPosition) {
+    public MinionCard(final int mana, final String description, final ArrayList<String> colors,
+                      final String name, final int health, final int attackDamage,
+                      final int playerId, final int boardPosition) {
         super(mana, description, colors, name, playerId);
         this.health = health;
         this.attackDamage = attackDamage;
@@ -27,31 +29,31 @@ public class MinionCard extends Card{
         this.boardPosition = boardPosition;
     }
 
-    public int getHealth() {
+    public final int getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public final void setHealth(final int health) {
         this.health = health;
     }
 
-    public int getAttackDamage() {
+    public final int getAttackDamage() {
         return attackDamage;
     }
 
-    public void setAttackDamage(int attackDamage) {
+    public final void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
-    public int getFrozen() {
+    public final int getFrozen() {
         return frozen;
     }
 
-    public void setFrozen(int frozen) {
+    public final void setFrozen(final int frozen) {
         this.frozen = frozen;
     }
 
-    public int getBoardPosition() {
+    public final int getBoardPosition() {
         return boardPosition;
     }
 

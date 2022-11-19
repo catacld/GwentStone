@@ -12,13 +12,18 @@ public class Firestorm extends Card {
     @JsonIgnore
     private GameBoard board;
 
-    public Firestorm(int mana, String description, ArrayList<String> colors, int playerId) {
+    public Firestorm(final int mana, final String description, final ArrayList<String> colors,
+                     final int playerId) {
         super(mana, description, colors, "Firestorm", playerId);
         this.board = GameBoard.getInstance();
     }
 
-    public void useAbility(int affectedRow) {
-        // get the row of cards
+    /**
+     * decrease the health of each card on the row of
+     * index "affectedRow" by 1
+     */
+    public final void useAbility(final int affectedRow) {
+        // get the cards placed on the affected row
         ArrayList<MinionCard> cardsOnRow = board.getRow(affectedRow);
 
         // decrease each card's health
@@ -30,11 +35,11 @@ public class Firestorm extends Card {
         board.cleanRow(affectedRow);
     }
 
-    public GameBoard getBoard() {
+    public final GameBoard getBoard() {
         return board;
     }
 
-    public void setBoard(GameBoard board) {
+    public final void setBoard(final GameBoard board) {
         this.board = board;
     }
 }
